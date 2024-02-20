@@ -9,6 +9,9 @@ import SwiftUI
 
 @main
 struct PlaygroundApp: App {
+//	init() {
+//		UIPageControl.appearance().pageIndicatorTintColor = UIColor.white
+//	}
     var body: some Scene {
         WindowGroup {
             ContentView()

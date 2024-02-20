@@ -11,6 +11,8 @@
 		C2E70C672B832CF3002E3109 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C662B832CF3002E3109 /* ContentView.swift */; };
 		C2E70C692B832CF4002E3109 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E70C682B832CF4002E3109 /* Assets.xcassets */; };
 		C2E70C6C2B832CF4002E3109 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E70C6B2B832CF4002E3109 /* Preview Assets.xcassets */; };
+		C2E70C732B8342E9002E3109 /* Profile Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C722B8342E9002E3109 /* Profile Card.swift */; };
+		C2E70C772B847892002E3109 /* Fidget Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C762B847892002E3109 /* Fidget Card.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		C2E70C662B832CF3002E3109 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C2E70C682B832CF4002E3109 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2E70C6B2B832CF4002E3109 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C2E70C722B8342E9002E3109 /* Profile Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile Card.swift"; sourceTree = "<group>"; };
+		C2E70C762B847892002E3109 /* Fidget Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Fidget Card.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,8 @@
 			children = (
 				C2E70C642B832CF3002E3109 /* PlaygroundApp.swift */,
 				C2E70C662B832CF3002E3109 /* ContentView.swift */,
+				C2E70C722B8342E9002E3109 /* Profile Card.swift */,
+				C2E70C762B847892002E3109 /* Fidget Card.swift */,
 				C2E70C682B832CF4002E3109 /* Assets.xcassets */,
 				C2E70C6A2B832CF4002E3109 /* Preview Content */,
 			);
@@ -137,6 +143,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2E70C732B8342E9002E3109 /* Profile Card.swift in Sources */,
+				C2E70C772B847892002E3109 /* Fidget Card.swift in Sources */,
 				C2E70C672B832CF3002E3109 /* ContentView.swift in Sources */,
 				C2E70C652B832CF3002E3109 /* PlaygroundApp.swift in Sources */,
 			);
@@ -275,6 +283,7 @@
 				DEVELOPMENT_TEAM = CH75XA8LVR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Playground;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -304,6 +313,7 @@
 				DEVELOPMENT_TEAM = CH75XA8LVR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Playground;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
