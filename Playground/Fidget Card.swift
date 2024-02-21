@@ -7,6 +7,33 @@
 
 import SwiftUI
 
+extension Color {
+	init(hex: String) {
+		let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+		var int: UInt64 = 0
+		Scanner(string: hex).scanHexInt64(&int)
+		let a, r, g, b: UInt64
+		switch hex.count {
+			case 3: // RGB (12-bit)
+				(a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+			case 6: // RGB (24-bit)
+				(a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+			case 8: // ARGB (32-bit)
+				(a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+			default:
+				(a, r, g, b) = (255, 0, 0, 0)
+		}
+		
+		self.init(
+			.sRGB,
+			red: Double(r) / 255,
+			green: Double(g) / 255,
+			blue:  Double(b) / 255,
+			opacity: Double(a) / 255
+		)
+	}
+}
+
 struct FidgetCard: View {
     
     @State var cardWidth : CGFloat = 320
@@ -27,7 +54,11 @@ struct FidgetCard: View {
                     
                     //Colored Rectangle
                     RoundedRectangle(cornerRadius: 24, style: .continuous)
-                        .fill(Color.blue)
+						.fill(Color(hex: "99E2FC"))
+						.fill(RadialGradient(gradient: Gradient(colors: [Color(hex: "50D8F8"), Color.clear]), center: UnitPoint(x: 0.2, y: 1.4), startRadius: 0, endRadius: 200))
+						.fill(RadialGradient(gradient: Gradient(colors: [Color(hex: "2E97FF"), Color.clear]), center: UnitPoint(x: 1, y: 1), startRadius: 0, endRadius: 400))
+						.fill(RadialGradient(gradient: Gradient(colors: [Color(hex: "50D8F8"), Color.clear]), center: UnitPoint(x: 1.1, y: 0.3), startRadius: 0, endRadius: 200))
+						.fill(RadialGradient(gradient: Gradient(colors: [Color(hex: "2E97FF"), Color.clear]), center: UnitPoint(x: -0.4, y: 0), startRadius: 0, endRadius: 200))
                         .frame(width: cardWidth, height: cardHeight)
                     
                     //Drag Card
