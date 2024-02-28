@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-	
+    
+    @StateObject var motionManager = MotionManager()
+    
 	var body: some View {
 		TabView {
             
@@ -46,8 +48,27 @@ struct ContentView: View {
                     .padding(.bottom, 48)
 			}
             
+            VStack (alignment: .leading){
+                VStack (alignment: .leading, spacing: 4) {
+                    Text("Feb 28th, 2024")
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .opacity(0.5)
+                    Text("Parallax Photo")
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                }
+                .padding(EdgeInsets(top: 24, leading: 24, bottom: 0, trailing: 24))
+                .background(Color.clear.ignoresSafeArea(edges: []))
+                
+                ParallaxPhoto(motionManager: motionManager)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.bottom, 64)
+            }
+            
 		}
 		.tabViewStyle(PageTabViewStyle())
+        .onAppear {
+            motionManager.startMotionManager()
+        }
 	}
 }
 
