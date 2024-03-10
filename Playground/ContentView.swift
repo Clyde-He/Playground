@@ -29,7 +29,7 @@ struct ContentView: View {
             
         }
 
-        .tint(Color.primary.opacity(0.7))
+        .tint(Color.primary.opacity(0.6))
         .background(.black)
         .padding(0)
 	}
