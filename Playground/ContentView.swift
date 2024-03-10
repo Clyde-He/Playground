@@ -28,6 +28,7 @@ struct ContentView: View {
             .navigationTitle("Playground")
             
         }
+        .tint(Color.primary.opacity(0.7))
         .background(.black)
         .padding(0)
         .onAppear {
