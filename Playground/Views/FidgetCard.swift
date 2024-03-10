@@ -128,6 +128,8 @@ struct FidgetCard: View {
                 .animation(.easeInOut(duration: 0.15), value: dragDegree)
             }
         }
+		.navigationTitle("Fidget Card")
+		.navigationBarTitleDisplayMode(.inline)
     }
 }
 

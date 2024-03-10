@@ -49,6 +49,14 @@ struct ParallaxPhoto: View {
             
             
         }
+		.navigationTitle("Parallax Photo")
+		.navigationBarTitleDisplayMode(.inline)
+		.onAppear {
+			motionManager.startMotionManager()
+		}
+		.onDisappear() {
+			motionManager.stopMotioManager()
+		}
         .onReceive(motionManager.$motion) { motion in
             pitch = motion?.attitude.pitch ?? 0
             if  (-1.5 < pitch) && (pitch < 1.5) {

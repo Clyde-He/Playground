@@ -44,6 +44,8 @@ struct ProfileCard: View {
 				isActive = !isActive
 			}
 		}
+		.navigationTitle("Profile Card")
+		.navigationBarTitleDisplayMode(.inline)
 	}
 }
 

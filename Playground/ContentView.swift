@@ -28,12 +28,13 @@ struct ContentView: View {
             .navigationTitle("Playground")
             
         }
+<<<<<<< Updated upstream
         .tint(Color.primary.opacity(0.7))
+=======
+		.tint(.secondary)
+>>>>>>> Stashed changes
         .background(.black)
         .padding(0)
-        .onAppear {
-            motionManager.startMotionManager()
-        }
 	}
 }
 
