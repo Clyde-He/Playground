@@ -16,7 +16,8 @@ struct ContentView: View {
         NavigationView {
             ScrollView(.vertical) {
                 VStack(spacing: 8) {
-                    ListItem(destinationView: AnyView(ElasticViewTransition()), title: "Elastic View Transition", date: "Mar 8th, 2024")
+                    ListItem(destinationView: AnyView(ProfilePhotoDragTransition()), title: "Profile Photo Drag Transition", date: "Mar 13th, 2024")
+                    ListItem(destinationView: AnyView(ProfileAvatarTransition()), title: "Profile Avatar Transition", date: "Mar 8th, 2024")
                     ListItem(destinationView: AnyView(ParallaxPhoto(motionManager: motionManager)), title: "Parallax Photo", date: "Feb 28th, 2024")
                     ListItem(destinationView: AnyView(FidgetCard()), title: "Fidget Card", date: "Feb 20th, 2024")
                     ListItem(destinationView: AnyView(ProfileCard()), title: "Profile Card", date: "Feb 19th, 2024")

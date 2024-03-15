@@ -8,10 +8,10 @@
 import SwiftUI
 import UIKit
 
-struct ElasticViewTransition: View {
+struct ProfileAvatarTransition: View {
 	
 	var screenWidth = UIScreen.main.bounds.width
-	var transitionThreshold = UIScreen.main.bounds.width * 0.3
+	var transitionThreshold = UIScreen.main.bounds.width * 0.25
 	
 	@State private var scrollOffset = 0.0
 	@State private var scrollElasticOffset = 0.0
@@ -176,5 +176,5 @@ struct ElasticViewTransition: View {
 }
 
 #Preview {
-	ElasticViewTransition()
+	ProfileAvatarTransition()
 }

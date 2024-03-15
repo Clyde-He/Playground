@@ -43,5 +43,5 @@ struct ListItem: View {
 }
 
 #Preview {
-    ListItem(destinationView: AnyView(ElasticViewTransition()), title: "Elastic View Transition", date: "Mar 8th, 2024")
+    ListItem(destinationView: AnyView(ProfileAvatarTransition()), title: "Elastic View Transition", date: "Mar 8th, 2024")
 }
