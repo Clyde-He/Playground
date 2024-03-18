@@ -107,8 +107,8 @@ struct ProfileAvatarTransition: View {
 							.foregroundStyle(Color.primary)
 							.padding(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
 							.background(RoundedRectangle(cornerRadius: 48, style: .continuous)
-								.fill(Color.primary.opacity(0.03))
-								.strokeBorder(Color.primary.opacity(0.05), style: StrokeStyle(lineWidth: 1)))
+								.fill(Color.primary.opacity(0.05))
+								.strokeBorder(Color.primary.opacity(0.1), style: StrokeStyle(lineWidth: 1)))
 							.opacity(hideControls ? 0 : 1)
 					}
 					

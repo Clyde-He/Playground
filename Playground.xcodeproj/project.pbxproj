@@ -33,7 +33,7 @@
 		C2E70C722B8342E9002E3109 /* ProfileCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCard.swift; sourceTree = "<group>"; };
 		C2E70C762B847892002E3109 /* FidgetCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FidgetCard.swift; sourceTree = "<group>"; };
 		C2E954ED2B8F2520001B0843 /* ParallaxPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParallaxPhoto.swift; sourceTree = "<group>"; };
-		C2E954EF2B8F259D001B0843 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C2E954EF2B8F259D001B0843 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C2E954F02B8F30FB001B0843 /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,14 +88,14 @@
 		C2E70C632B832CF3002E3109 /* Playground */ = {
 			isa = PBXGroup;
 			children = (
-				C2E954EF2B8F259D001B0843 /* Info.plist */,
 				C2E70C642B832CF3002E3109 /* PlaygroundApp.swift */,
 				C2E70C662B832CF3002E3109 /* ContentView.swift */,
 				C23980BD2B9B2C9B0004E57E /* Views */,
 				C23980BE2B9B2CA20004E57E /* Components */,
 				C2E954F22B8F3106001B0843 /* Classes */,
-				C2E70C682B832CF4002E3109 /* Assets.xcassets */,
 				C2E70C6A2B832CF4002E3109 /* Preview Content */,
+				C2E70C682B832CF4002E3109 /* Assets.xcassets */,
+				C2E954EF2B8F259D001B0843 /* Info.plist */,
 			);
 			path = Playground;
 			sourceTree = "<group>";
