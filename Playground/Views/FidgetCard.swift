@@ -122,9 +122,11 @@ struct FidgetCard: View {
                         .foregroundStyle(Color.primary)
                 }
                 .padding(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
-                .background(RoundedRectangle(cornerRadius: 48, style: .continuous)
-                    .fill(Color.primary.opacity(0.05))
-                    .strokeBorder(Color.primary.opacity(0.01), style: StrokeStyle(lineWidth: 1)))
+                .background(
+					RoundedRectangle(cornerRadius: 48, style: .continuous)
+						.fill(Color.primary.opacity(0.05))
+						.strokeBorder(Color.primary.opacity(0.01), style: StrokeStyle(lineWidth: 1))
+				)
                 .animation(.easeInOut(duration: 0.15), value: dragDegree)
             }
         }
