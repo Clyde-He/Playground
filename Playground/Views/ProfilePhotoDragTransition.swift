@@ -22,8 +22,12 @@ struct ProfilePhotoDragTransition: View {
 	// Scroll View
     @State private var scrollOffset = 0.0
     @State private var scrollElasticOffset = 0.0
+
 	@State private var swipeIndicatorOffset = 48.0
-    @State private var foregroundOpacity = 1.0
+	@State private var swipeIndicatorOpacity = 0.5
+	@State private var swipeIndicatorSize = 32.0
+
+	@State private var foregroundOpacity = 1.0
     @State private var viewTransitioned = false
     
 	// ScrollUI
@@ -78,7 +82,7 @@ struct ProfilePhotoDragTransition: View {
 									.aspectRatio(contentMode: .fit)
 									.opacity(reachedTransitionThreshold ? 1 : 0)
 							}
-							.frame(width: reachedTransitionThreshold ? 40 : 24, height: reachedTransitionThreshold ? 40 : 24)
+							.frame(width: swipeIndicatorSize, height: swipeIndicatorSize)
 							.clipShape(Circle())
 							
 							if showText {
@@ -125,6 +129,12 @@ struct ProfilePhotoDragTransition: View {
 											
 											if scrollOffset <= screenWidth {
 												scrollElasticOffset = screenWidth - scrollOffset
+												
+												// Calculate swipeIndicatorSize
+												swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 32, outMax: 56, inValue: scrollElasticOffset)
+												
+												// Calculate swipeIndicatorOpacity
+												swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.5, outMax: 1, inValue: scrollElasticOffset)
 												
 												// Calculate swipeIndicatorOffset
 												swipeIndicatorOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: (96 - transitionThreshold) / 2, inValue: scrollElasticOffset)
