@@ -14,10 +14,10 @@ struct ProfilePhotoDragTransition: View {
 	// Environments & Preferences
     var screenWidth = UIScreen.main.bounds.width
 	var screenHeight = UIScreen.main.bounds.height
-	@State private var transitionPercentage = 0.25
+	@State private var transitionPercentage = 0.20
 	@State private var transitionThreshold = UIScreen.main.bounds.width * 0.25
 	@State private var hideControls = false
-	@State private var showText = true
+	@State private var showText = false
     
 	// Scroll View
     @State private var scrollOffset = 0.0
@@ -70,6 +70,7 @@ struct ProfilePhotoDragTransition: View {
 						VStack(alignment:.center, spacing: 8) {
 							
 							ZStack {
+								
 								Image("Arrow_Left_Circle_Fill")
 									.renderingMode(.template)
 									.resizable()
@@ -81,8 +82,9 @@ struct ProfilePhotoDragTransition: View {
 									.resizable()
 									.aspectRatio(contentMode: .fit)
 									.opacity(reachedTransitionThreshold ? 1 : 0)
+								
 							}
-							.frame(width: swipeIndicatorSize, height: swipeIndicatorSize)
+							.frame(width: reachedTransitionThreshold ? 56 : swipeIndicatorSize, height: reachedTransitionThreshold ? 56 : swipeIndicatorSize)
 							.clipShape(Circle())
 							
 							if showText {
@@ -93,7 +95,7 @@ struct ProfilePhotoDragTransition: View {
 						}
 						.frame(maxWidth: 96)
 						.foregroundStyle(.primary)
-						.opacity(reachedTransitionThreshold ? 1 : 0.4)
+						.opacity(reachedTransitionThreshold ? 1 : swipeIndicatorOpacity)
 						.offset(x: swipeIndicatorOffset)
 						.animation(.smooth(duration: 0.2), value: reachedTransitionThreshold)
 						
@@ -131,10 +133,10 @@ struct ProfilePhotoDragTransition: View {
 												scrollElasticOffset = screenWidth - scrollOffset
 												
 												// Calculate swipeIndicatorSize
-												swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 32, outMax: 56, inValue: scrollElasticOffset)
+												swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 24, outMax: 40, inValue: scrollElasticOffset)
 												
 												// Calculate swipeIndicatorOpacity
-												swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.5, outMax: 1, inValue: scrollElasticOffset)
+												swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.3, outMax: 0.7, inValue: scrollElasticOffset)
 												
 												// Calculate swipeIndicatorOffset
 												swipeIndicatorOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: (96 - transitionThreshold) / 2, inValue: scrollElasticOffset)
