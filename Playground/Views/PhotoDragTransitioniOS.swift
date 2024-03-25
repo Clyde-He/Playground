@@ -1,5 +1,5 @@
 //
-//  ProfilePhotoDragTransition.swift
+//  PhotoDragTransitioniOS.swift
 //  Playground
 //
 //  Created by Clyde He on 3/13/24.
@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 import ScrollUI
 
-struct ProfilePhotoDragTransition: View {
+struct PhotoDragTransitioniOS: View {
     
 	// Environments & Preferences
     var screenWidth = UIScreen.main.bounds.width
@@ -307,5 +307,5 @@ struct ProfilePhotoDragTransition: View {
 }
 
 #Preview {
-    ProfilePhotoDragTransition()
+    PhotoDragTransitioniOS()
 }

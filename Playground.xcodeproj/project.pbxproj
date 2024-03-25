@@ -9,8 +9,9 @@
 /* Begin PBXBuildFile section */
 		C23980BC2B9B0FB60004E57E /* ProfileAvatarTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23980BB2B9B0FB60004E57E /* ProfileAvatarTransition.swift */; };
 		C23980C02B9B2CE00004E57E /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23980BF2B9B2CE00004E57E /* ListItem.swift */; };
-		C25BA96F2BA24DA100DBE205 /* ProfilePhotoDragTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BA96E2BA24DA100DBE205 /* ProfilePhotoDragTransition.swift */; };
+		C25BA96F2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BA96E2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift */; };
 		C25BA9722BA2553C00DBE205 /* ScrollUI in Frameworks */ = {isa = PBXBuildFile; productRef = C25BA9712BA2553C00DBE205 /* ScrollUI */; };
+		C2B705512BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B705502BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift */; };
 		C2E70C652B832CF3002E3109 /* PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C642B832CF3002E3109 /* PlaygroundApp.swift */; };
 		C2E70C672B832CF3002E3109 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C662B832CF3002E3109 /* ContentView.swift */; };
 		C2E70C692B832CF4002E3109 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2E70C682B832CF4002E3109 /* Assets.xcassets */; };
@@ -24,7 +25,8 @@
 /* Begin PBXFileReference section */
 		C23980BB2B9B0FB60004E57E /* ProfileAvatarTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAvatarTransition.swift; sourceTree = "<group>"; };
 		C23980BF2B9B2CE00004E57E /* ListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItem.swift; sourceTree = "<group>"; };
-		C25BA96E2BA24DA100DBE205 /* ProfilePhotoDragTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoDragTransition.swift; sourceTree = "<group>"; };
+		C25BA96E2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDragTransitioniOS.swift; sourceTree = "<group>"; };
+		C2B705502BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDragTransitionAndroid.swift; sourceTree = "<group>"; };
 		C2E70C612B832CF3002E3109 /* Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Playground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2E70C642B832CF3002E3109 /* PlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundApp.swift; sourceTree = "<group>"; };
 		C2E70C662B832CF3002E3109 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -56,7 +58,8 @@
 				C2E70C762B847892002E3109 /* FidgetCard.swift */,
 				C2E954ED2B8F2520001B0843 /* ParallaxPhoto.swift */,
 				C23980BB2B9B0FB60004E57E /* ProfileAvatarTransition.swift */,
-				C25BA96E2BA24DA100DBE205 /* ProfilePhotoDragTransition.swift */,
+				C25BA96E2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift */,
+				C2B705502BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2B705512BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift in Sources */,
 				C2E70C732B8342E9002E3109 /* ProfileCard.swift in Sources */,
 				C2E954EE2B8F2520001B0843 /* ParallaxPhoto.swift in Sources */,
 				C2E954F12B8F30FB001B0843 /* MotionManager.swift in Sources */,
@@ -199,7 +203,7 @@
 				C23980C02B9B2CE00004E57E /* ListItem.swift in Sources */,
 				C2E70C772B847892002E3109 /* FidgetCard.swift in Sources */,
 				C2E70C672B832CF3002E3109 /* ContentView.swift in Sources */,
-				C25BA96F2BA24DA100DBE205 /* ProfilePhotoDragTransition.swift in Sources */,
+				C25BA96F2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift in Sources */,
 				C2E70C652B832CF3002E3109 /* PlaygroundApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
