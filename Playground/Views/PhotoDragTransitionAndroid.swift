@@ -11,10 +11,6 @@ import ScrollUI
 
 struct PhotoDragTransitionAndroid: View {
 	
-	init() {
-		UIScrollView.appearance().bounces = false
-	}
-	
 	// Environments & Preferences
 	var screenWidth = UIScreen.main.bounds.width
 	var screenHeight = UIScreen.main.bounds.height
@@ -28,7 +24,7 @@ struct PhotoDragTransitionAndroid: View {
 	@State private var normalizedDragOffset = 0.0
 	
 	@State private var swipeIndicatorOffset = 48.0
-	@State private var swipeIndicatorOpacity = 0.5
+	@State private var swipeIndicatorOpacity = 0.4
 	@State private var swipeIndicatorSize = 32.0
 	
 	@State private var foregroundOpacity = 1.0
@@ -83,7 +79,10 @@ struct PhotoDragTransitionAndroid: View {
 										.aspectRatio(contentMode: .fit)
 										.containerRelativeFrame(.horizontal)
 										
-									Color.red
+									// Drag Rail
+									
+									Rectangle()
+										.opacity(0.0001)
 										.frame(height: 100)
 										.gesture(
 											DragGesture(minimumDistance: 0)
@@ -110,10 +109,16 @@ struct PhotoDragTransitionAndroid: View {
 															if !reachedTransitionThreshold {
 																mediumImpact.impactOccurred()
 																reachedTransitionThreshold = true
+                                                                withAnimation(.smooth(duration: 0.2)) {
+                                                                    swipeIndicatorOpacity = 1
+                                                                }
 															}
 														}
 														else {
 															reachedTransitionThreshold = false
+                                                            withAnimation(.smooth(duration: 0.2)) {
+                                                                swipeIndicatorOpacity = 0.4
+                                                            }
 														}
 														
 													}
@@ -126,6 +131,8 @@ struct PhotoDragTransitionAndroid: View {
 															viewTransitioned = true
 														}
 														
+                                                        
+														swipeIndicatorOpacity = 0.4
 														foregroundOpacity = 1
 														reachedTransitionThreshold = false
 														dragOffset = 0
@@ -144,6 +151,12 @@ struct PhotoDragTransitionAndroid: View {
 							}
 						}
 						.scrollTargetBehavior(.paging)
+						.onAppear {
+							UIScrollView.appearance().bounces = false
+						}
+						.onDisappear {
+							UIScrollView.appearance().bounces = true
+						}
 						
 						// Swipe Indicator
 						
@@ -153,8 +166,10 @@ struct PhotoDragTransitionAndroid: View {
 									.renderingMode(.template)
 									.resizable()
 									.aspectRatio(contentMode: .fit)
-									.opacity(reachedTransitionThreshold ? 1 : 0.4)
-									.frame(width: 24, height: 24)
+//									.opacity(reachedTransitionThreshold ? 1 : 0.4)
+                                    .opacity(swipeIndicatorOpacity)
+//                                  .animation(.snappy, value: reachedTransitionThreshold)
+                                    .frame(width: 24, height: 24)
 								
 						}
 						.frame(width: 40, height: 40)
@@ -164,7 +179,6 @@ struct PhotoDragTransitionAndroid: View {
 						.shadow(color: .black.opacity(0.19), radius: 1.5, x: 0, y: 0.5)
 						.shadow(color: .black.opacity(0.039), radius: 1, x: 0, y: 0)
 						.offset(x: swipeIndicatorOffset)
-//						.animation(.snappy, value: reachedTransitionThreshold)
 					}
 					
 					

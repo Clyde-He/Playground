@@ -148,20 +148,25 @@ struct PhotoDragTransitioniOS: View {
 											
 											// Toggle transition
 											
+											var scrollViewDraggedToThreshold = false
+											
+											
+											// if elastic offset reaches threshold
 											if scrollOffset < screenWidth - transitionThreshold {
 												if !reachedTransitionThreshold {
 													mediumImpact.impactOccurred()
 													reachedTransitionThreshold = true
 												}
-												if !scrollViewDragged {
+												if scrollViewDragged {
+													scrollViewDraggedToThreshold = true
 													viewTransitioned = true
+												}
+												if !scrollViewDragged && scrollViewDraggedToThreshold {
+													
 												}
 											}
 											else {
-												if reachedTransitionThreshold {
-													mediumImpact.impactOccurred()
-													reachedTransitionThreshold = false
-												}
+												reachedTransitionThreshold = false
 											}
 										}
 								}
