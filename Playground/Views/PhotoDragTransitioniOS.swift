@@ -29,6 +29,7 @@ struct PhotoDragTransitioniOS: View {
 
 	@State private var foregroundOpacity = 1.0
     @State private var viewTransitioned = false
+	@State private var scrollViewDraggedToThreshold = false
     
 	// ScrollUI
     @State private var scrollViewDragged = false
@@ -75,16 +76,16 @@ struct PhotoDragTransitioniOS: View {
 									.renderingMode(.template)
 									.resizable()
 									.aspectRatio(contentMode: .fit)
-									.opacity(reachedTransitionThreshold ? 0 : 1)
+									.opacity(scrollViewDraggedToThreshold ? 0 : 1)
 								
 								Image("User_Circle_Fill")
 									.renderingMode(.template)
 									.resizable()
 									.aspectRatio(contentMode: .fit)
-									.opacity(reachedTransitionThreshold ? 1 : 0)
+									.opacity(scrollViewDraggedToThreshold ? 1 : 0)
 								
 							}
-							.frame(width: reachedTransitionThreshold ? 56 : swipeIndicatorSize, height: reachedTransitionThreshold ? 56 : swipeIndicatorSize)
+							.frame(width: scrollViewDraggedToThreshold ? 56 : swipeIndicatorSize, height: scrollViewDraggedToThreshold ? 56 : swipeIndicatorSize)
 							.clipShape(Circle())
 							
 							if showText {
@@ -95,9 +96,9 @@ struct PhotoDragTransitioniOS: View {
 						}
 						.frame(maxWidth: 96)
 						.foregroundStyle(.primary)
-						.opacity(reachedTransitionThreshold ? 1 : swipeIndicatorOpacity)
+						.opacity(scrollViewDraggedToThreshold ? 1 : swipeIndicatorOpacity)
 						.offset(x: swipeIndicatorOffset)
-						.animation(.smooth(duration: 0.2), value: reachedTransitionThreshold)
+						.animation(.smooth(duration: 0.2), value: scrollViewDraggedToThreshold)
 						
 						
 						// ScrollView
@@ -146,27 +147,39 @@ struct PhotoDragTransitioniOS: View {
 												
 											}
 											
-											// Toggle transition
+											// See if ScrollView Reached TransitionThreshold
 											
-											var scrollViewDraggedToThreshold = false
-											
-											
-											// if elastic offset reaches threshold
 											if scrollOffset < screenWidth - transitionThreshold {
-												if !reachedTransitionThreshold {
-													mediumImpact.impactOccurred()
-													reachedTransitionThreshold = true
-												}
-												if scrollViewDragged {
-													scrollViewDraggedToThreshold = true
-													viewTransitioned = true
-												}
-												if !scrollViewDragged && scrollViewDraggedToThreshold {
-													
-												}
+												reachedTransitionThreshold = true
+												
 											}
 											else {
 												reachedTransitionThreshold = false
+											}
+											
+											// See if ScrollView Dragged
+											
+											if scrollViewDragged {
+												if reachedTransitionThreshold {
+													if !scrollViewDraggedToThreshold {
+														mediumImpact.impactOccurred()
+													}
+													scrollViewDraggedToThreshold = true
+													
+												}
+												else {
+													scrollViewDraggedToThreshold = false
+												}
+											}
+											else {
+												if reachedTransitionThreshold {
+													if scrollViewDraggedToThreshold {
+														viewTransitioned = true
+													}
+												}
+												else {
+													scrollViewDraggedToThreshold = false
+												}
 											}
 										}
 								}
