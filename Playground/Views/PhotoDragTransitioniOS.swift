@@ -14,8 +14,8 @@ struct PhotoDragTransitioniOS: View {
 	// Environments & Preferences
     var screenWidth = UIScreen.main.bounds.width
 	var screenHeight = UIScreen.main.bounds.height
-	@State private var transitionPercentage = 0.20
-	@State private var transitionThreshold = UIScreen.main.bounds.width * 0.25
+	@State private var transitionPercentage = 0.2
+	@State private var transitionThreshold = UIScreen.main.bounds.width * 0.2
 	@State private var hideControls = false
 	@State private var showText = false
     
