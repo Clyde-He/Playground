@@ -18,6 +18,13 @@ struct PhotoDragTransitioniOS: View {
 	@State private var transitionThreshold = UIScreen.main.bounds.width * 0.2
 	@State private var hideControls = false
 	@State private var showText = false
+	@State private var filledArrow = false
+	@State private var goDetailPage = false
+	@State private var changeOpacity = false
+	@State private var changeSize = true
+	@State private var startSize = 12.0
+	@State private var endSize = 32.0
+	@State private var finalSize = 56.0
     
 	// Scroll View
     @State private var scrollOffset = 0.0
@@ -59,203 +66,323 @@ struct PhotoDragTransitioniOS: View {
                 
 				// + Controls
 				
-                VStack {
+                ZStack {
 					
 					// Swipe Indicator + Scroll View
 					
-					ZStack (alignment: .trailing) {
+					VStack {
 						
-						
-						// Swipe Indicator
-						
-						VStack(alignment:.center, spacing: 8) {
+						ZStack (alignment: .trailing) {
 							
-							ZStack {
+							// Swipe Indicator
+							
+							VStack(alignment:.center, spacing: 8) {
 								
-								Image("Arrow_Left_Circle_Fill")
-									.renderingMode(.template)
-									.resizable()
-									.aspectRatio(contentMode: .fit)
-									.opacity(scrollViewDraggedToThreshold ? 0 : 1)
+								ZStack {
+									
+									Image(filledArrow ? "Arrow_Left_Circle_Fill" : "Arrow_Left_Circle")
+										.renderingMode(.template)
+										.resizable()
+										.aspectRatio(contentMode: .fit)
+										.opacity(scrollViewDraggedToThreshold ? 0 : 1)
+									
+									Image(goDetailPage ? "Detail_Circle_Fill" : "User_Circle_Fill")
+										.renderingMode(.template)
+										.resizable()
+										.aspectRatio(contentMode: .fit)
+										.opacity(scrollViewDraggedToThreshold ? 1 : 0)
+									
+								}
+								.frame(width: changeSize ? (scrollViewDraggedToThreshold ? finalSize : swipeIndicatorSize) : startSize, height: changeSize ? (scrollViewDraggedToThreshold ? finalSize : swipeIndicatorSize) : startSize)
+								.clipShape(Circle())
 								
-								Image("User_Circle_Fill")
-									.renderingMode(.template)
-									.resizable()
-									.aspectRatio(contentMode: .fit)
-									.opacity(scrollViewDraggedToThreshold ? 1 : 0)
-								
+								if showText {
+									Text("Swipe to view profile")
+										.font(.system(.subheadline, weight: .medium))
+										.multilineTextAlignment(.center)
+								}
 							}
-							.frame(width: scrollViewDraggedToThreshold ? 56 : swipeIndicatorSize, height: scrollViewDraggedToThreshold ? 56 : swipeIndicatorSize)
-							.clipShape(Circle())
+							.frame(maxWidth: 96)
+							.foregroundStyle(.primary)
+							.opacity(changeOpacity ? (scrollViewDraggedToThreshold ? 1 : swipeIndicatorOpacity) : 1)
+							.offset(x: swipeIndicatorOffset)
+							.animation(.smooth(duration: 0.2), value: scrollViewDraggedToThreshold)
 							
-							if showText {
-								Text("Swipe to view profile")
-									.font(.system(.subheadline, weight: .medium))
-									.multilineTextAlignment(.center)
-							}
-						}
-						.frame(maxWidth: 96)
-						.foregroundStyle(.primary)
-						.opacity(scrollViewDraggedToThreshold ? 1 : swipeIndicatorOpacity)
-						.offset(x: swipeIndicatorOffset)
-						.animation(.smooth(duration: 0.2), value: scrollViewDraggedToThreshold)
-						
-						
-						// ScrollView
-						
-						ScrollView(.horizontal, showsIndicators: false) {
 							
-							HStack(spacing: 0) {
+							// ScrollView
+							
+							ScrollView(.horizontal, showsIndicators: false) {
 								
-								Image("TestPhoto01")
-									.resizable()
-									.aspectRatio(contentMode: .fit)
-									.containerRelativeFrame(.horizontal)
-								Image("TestPhoto02")
-									.resizable()
-									.aspectRatio(contentMode: .fit)
-									.containerRelativeFrame(.horizontal)
-								Image("TestPhoto03")
-									.resizable()
-									.aspectRatio(contentMode: .fit)
-									.containerRelativeFrame(.horizontal)
-								GeometryReader { geometry in
-									Color.clear
-										.frame(width: 0, height: 0)
-										.onAppear {
-											scrollOffset = geometry.frame(in: .global).minX
-										}
-										.onChange(of: geometry.frame(in: .global).minX) { _, newValue in
-											
-											// Read scrollOffset
-											scrollOffset = newValue
-											
-											if scrollOffset <= screenWidth {
-												scrollElasticOffset = screenWidth - scrollOffset
-												
-												// Calculate swipeIndicatorSize
-												swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 24, outMax: 40, inValue: scrollElasticOffset)
-												
-												// Calculate swipeIndicatorOpacity
-												swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.3, outMax: 0.7, inValue: scrollElasticOffset)
-												
-												// Calculate swipeIndicatorOffset
-												swipeIndicatorOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: (96 - transitionThreshold) / 2, inValue: scrollElasticOffset)
-												
-												// Calculate ForegroundOpacity
-												foregroundOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 1, outMax: 0.5, inValue: scrollElasticOffset)
-												
+								HStack(spacing: 0) {
+									
+									Image("TestPhoto01")
+										.resizable()
+										.aspectRatio(contentMode: .fit)
+										.containerRelativeFrame(.horizontal)
+									Image("TestPhoto02")
+										.resizable()
+										.aspectRatio(contentMode: .fit)
+										.containerRelativeFrame(.horizontal)
+									Image("TestPhoto03")
+										.resizable()
+										.aspectRatio(contentMode: .fit)
+										.containerRelativeFrame(.horizontal)
+									GeometryReader { geometry in
+										Color.clear
+											.frame(width: 0, height: 0)
+											.onAppear {
+												scrollOffset = geometry.frame(in: .global).minX
 											}
-											
-											// See if ScrollView Reached TransitionThreshold
-											
-											if scrollOffset < screenWidth - transitionThreshold {
-												reachedTransitionThreshold = true
+											.onChange(of: geometry.frame(in: .global).minX) { _, newValue in
 												
-											}
-											else {
-												reachedTransitionThreshold = false
-											}
-											
-											// See if ScrollView Dragged
-											
-											if scrollViewDragged {
-												if reachedTransitionThreshold {
-													if !scrollViewDraggedToThreshold {
-														mediumImpact.impactOccurred()
-													}
-													scrollViewDraggedToThreshold = true
+												// Read scrollOffset
+												scrollOffset = newValue
+												
+												if scrollOffset <= screenWidth {
+													scrollElasticOffset = screenWidth - scrollOffset
+													
+													// Calculate swipeIndicatorSize
+													swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: startSize, outMax: endSize, inValue: scrollElasticOffset)
+													
+													// Calculate swipeIndicatorOpacity
+													swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.3, outMax: 0.7, inValue: scrollElasticOffset)
+													
+													// Calculate swipeIndicatorOffset
+													swipeIndicatorOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: (96 - transitionThreshold) / 2, inValue: scrollElasticOffset)
+													
+													// Calculate ForegroundOpacity
+													foregroundOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 1, outMax: 0.5, inValue: scrollElasticOffset)
+													
+												}
+												
+												// See if ScrollView Reached TransitionThreshold
+												
+												if scrollOffset < screenWidth - transitionThreshold {
+													reachedTransitionThreshold = true
 													
 												}
 												else {
-													scrollViewDraggedToThreshold = false
+													reachedTransitionThreshold = false
 												}
-											}
-											else {
-												if reachedTransitionThreshold {
-													if scrollViewDraggedToThreshold {
-														viewTransitioned = true
+												
+												// See if ScrollView Dragged
+												
+												if scrollViewDragged {
+													if reachedTransitionThreshold {
+														if !scrollViewDraggedToThreshold {
+															mediumImpact.impactOccurred()
+														}
+														scrollViewDraggedToThreshold = true
+														
+													}
+													else {
+														scrollViewDraggedToThreshold = false
 													}
 												}
 												else {
-													scrollViewDraggedToThreshold = false
+													if reachedTransitionThreshold {
+														if scrollViewDraggedToThreshold {
+															viewTransitioned = true
+															print(viewTransitioned)
+															scrollViewDragged = false
+														}
+													}
+													else {
+														scrollViewDraggedToThreshold = false
+													}
 												}
 											}
-										}
+									}
+									.frame(width: 0, height: 0)
 								}
-								.frame(width: 0, height: 0)
+								.frame(maxHeight: UIScreen.main.bounds.width / 3 * 4)
+								.background(
+									GeometryReader { proxy in
+										Color.clear
+											.onAppear {
+												scollViewWidth = proxy.size.width
+											}
+									}
+								)
 							}
-							.frame(maxHeight: UIScreen.main.bounds.width / 3 * 4)
-							.background(
-								GeometryReader { proxy in
-									Color.clear
-										.onAppear {
-											scollViewWidth = proxy.size.width
-										}
+							.scrollViewStyle(.defaultStyle($state))
+							.onChange(of: state.isDragging) { _, newValue in
+								scrollViewDragged = newValue
+								
+							}
+							.onTapGesture {
+								withAnimation(.smooth(duration: 0.3)) {
+									hideControls.toggle()
 								}
-							)
-						}
-						.scrollViewStyle(.defaultStyle($state))
-						.onChange(of: state.isDragging) { _, newValue in
-							scrollViewDragged = newValue
+							}
+							.scrollTargetBehavior(.paging)
 							
 						}
-						.onTapGesture {
-							withAnimation(.smooth(duration: 0.3)) {
-								hideControls.toggle()
-							}
-						}
-						.scrollTargetBehavior(.paging)
+						
+						Spacer()
 						
 					}
-                    
-                    
-                    // Controls
-                    
-					VStack(alignment: .leading, spacing: 16) {
+					
+					
+					// Controls
+					
+					VStack {
 						
-						Text("Transition Percentage")
-							.font(.system(size: 12, weight: .medium, design: .monospaced))
-							.foregroundStyle(.secondary)
+						Spacer()
 						
-						
-						HStack(spacing: 20) {
+						VStack(alignment: .leading, spacing: 12) {
 							
-							Slider(value: $transitionPercentage,
-								   in: 0.1...0.4,
-								   step: 0.01,
-								   onEditingChanged: { _ in
-								transitionThreshold = transitionPercentage * screenWidth
-							})
-							.onChange(of: transitionPercentage) {
-								lightImpact.impactOccurred()
-							}
-							
-							Text(String(format: "%.2f", transitionPercentage))
-								.font(.system(size: 16, weight: .medium, design: .monospaced))
-								.foregroundStyle(Color.primary)
-							
-						}
-						
-						Divider()
-						
-						HStack(spacing: 20) {
-							Text("Show Text")
+							Text("Transition Percentage")
 								.font(.system(size: 12, weight: .medium, design: .monospaced))
 								.foregroundStyle(.secondary)
-							Toggle(isOn: $showText, label:{})
+							
+							
+							HStack(spacing: 20) {
+								
+								Slider(value: $transitionPercentage,
+									   in: 0.1...0.4,
+									   step: 0.01,
+									   onEditingChanged: { _ in
+									transitionThreshold = transitionPercentage * screenWidth
+								})
+								.onChange(of: transitionPercentage) {
+									lightImpact.impactOccurred()
+								}
+								
+								Text(String(format: "%.2f", transitionPercentage))
+									.font(.system(size: 16, weight: .medium, design: .monospaced))
+									.foregroundStyle(Color.primary)
+								
+							}
+							
+							Divider()
+							
+							HStack(spacing: 20) {
+								Text("Show Text")
+									.font(.system(size: 12, weight: .medium, design: .monospaced))
+									.foregroundStyle(.secondary)
+								Toggle(isOn: $showText, label:{})
+							}
+							
+							Divider()
+							
+							HStack(spacing: 20) {
+								Text("Go Detail Page")
+									.font(.system(size: 12, weight: .medium, design: .monospaced))
+									.foregroundStyle(.secondary)
+								Toggle(isOn: $goDetailPage, label:{})
+							}
+							
+							Divider()
+							
+							HStack(spacing: 20) {
+								Text("Use Filled Arrow Icon")
+									.font(.system(size: 12, weight: .medium, design: .monospaced))
+									.foregroundStyle(.secondary)
+								Toggle(isOn: $filledArrow, label:{})
+							}
+							
+							Divider()
+							
+							HStack(spacing: 20) {
+								Text("Change Size")
+									.font(.system(size: 12, weight: .medium, design: .monospaced))
+									.foregroundStyle(.secondary)
+								Toggle(isOn: $changeSize.animation(.smooth(duration: 0.3)), label:{})
+								
+							}
+							
+							VStack (spacing: 4) {
+								
+								HStack(spacing: 20) {
+									
+									Text("Min  ")
+										.font(.system(size: 12, weight: .medium, design: .monospaced))
+										.foregroundStyle(.secondary)
+									
+									Slider(value: $startSize,
+										   in: 8...56,
+										   step: 1
+									)
+									.onChange(of: startSize) {
+										lightImpact.impactOccurred()
+									}
+									
+									Text(String(format: "%.0f", startSize))
+										.font(.system(size: 16, weight: .medium, design: .monospaced))
+										.foregroundStyle(Color.primary)
+									
+								}
+								
+								if changeSize {
+									
+									HStack(spacing: 20) {
+										
+										Text("Max  ")
+											.font(.system(size: 12, weight: .medium, design: .monospaced))
+											.foregroundStyle(.secondary)
+										
+										Slider(value: $endSize,
+											   in: 8...56,
+											   step: 1
+										)
+										.onChange(of: endSize) {
+											lightImpact.impactOccurred()
+										}
+										
+										Text(String(format: "%.0f", endSize))
+											.font(.system(size: 16, weight: .medium, design: .monospaced))
+											.foregroundStyle(Color.primary)
+										
+									}
+									
+									HStack(spacing: 20) {
+										
+										Text("Final")
+											.font(.system(size: 12, weight: .medium, design: .monospaced))
+											.foregroundStyle(.secondary)
+										
+										Slider(value: $finalSize,
+											   in: 8...56,
+											   step: 1
+										)
+										.onChange(of: finalSize) {
+											lightImpact.impactOccurred()
+										}
+										
+										Text(String(format: "%.0f", finalSize))
+											.font(.system(size: 16, weight: .medium, design: .monospaced))
+											.foregroundStyle(Color.primary)
+										
+									}
+									
+								}
+							}
+							.padding(EdgeInsets(top: 8, leading: 14, bottom: 8, trailing: 20))
+							.background(RoundedRectangle(cornerRadius: 16, style: .continuous)
+								.fill(Color.primary.opacity(0.05))
+							)
+							
+							
+							Divider()
+							
+							HStack(spacing: 20) {
+								Text("Change Opacity")
+									.font(.system(size: 12, weight: .medium, design: .monospaced))
+									.foregroundStyle(.secondary)
+								Toggle(isOn: $changeOpacity, label:{})
+							}
+							
 						}
-						
-					}
-					.padding(EdgeInsets(top: 20, leading: 20, bottom: 16, trailing: 20))
-					.background(RoundedRectangle(cornerRadius: 16, style: .continuous)
-						.fill(Color.primary.opacity(0.05))
-						.strokeBorder(Color.primary.opacity(0.1), style: StrokeStyle(lineWidth: 1)))
-					.padding(32)
-					.opacity(hideControls ? 0 : 1)
+						.padding(EdgeInsets(top: 20, leading: 20, bottom: 16, trailing: 20))
+						.background(RoundedRectangle(cornerRadius: 24, style: .continuous)
+							.fill(Material.thin)
+							.strokeBorder(Color.primary.opacity(0.1), style: StrokeStyle(lineWidth: 1)))
+						.padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+						.opacity(hideControls ? 0 : 1)
 					
-                    Spacer()
-                    
+					}
+					
                 }
                 .padding(.top, geometry.safeAreaInsets.top)
                 .padding(.bottom, geometry.safeAreaInsets.bottom)
@@ -267,6 +394,8 @@ struct PhotoDragTransitioniOS: View {
                         .resizable()
                         .allowsHitTesting(false)
                         .opacity(foregroundOpacity)
+						.offset(x: viewTransitioned ? -screenWidth / 4 : 0, y: 0)
+						.animation(.smooth(duration: 0.3), value: viewTransitioned)
                 }
                 
                 // User Avatar
@@ -292,9 +421,9 @@ struct PhotoDragTransitioniOS: View {
 				}
 				
 				
-				// Profile View
+				// Secondary View
 				
-				Image("Profile")
+				Image(goDetailPage ? "Detail Page" : "Profile")
 					.resizable()
 					.scaledToFit()
 					.offset(x: viewTransitioned ? 0 : screenWidth)
@@ -302,8 +431,9 @@ struct PhotoDragTransitioniOS: View {
 					.gesture(
 						TapGesture()
 							.onEnded() {
-								viewTransitioned.toggle()
+								viewTransitioned = false
 								mediumImpact.impactOccurred()
+								print(viewTransitioned)
 							}
 					)
 				
