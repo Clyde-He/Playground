@@ -183,7 +183,6 @@ struct PhotoDragTransitioniOS: View {
 													if reachedTransitionThreshold {
 														if scrollViewDraggedToThreshold {
 															viewTransitioned = true
-															print(viewTransitioned)
 															scrollViewDragged = false
 														}
 													}
@@ -267,7 +266,7 @@ struct PhotoDragTransitioniOS: View {
 							Divider()
 							
 							HStack(spacing: 20) {
-								Text("Go Detail Page")
+								Text("Go to Detail Page")
 									.font(.system(size: 12, weight: .medium, design: .monospaced))
 									.foregroundStyle(.secondary)
 								Toggle(isOn: $goDetailPage, label:{})
@@ -433,7 +432,6 @@ struct PhotoDragTransitioniOS: View {
 							.onEnded() {
 								viewTransitioned = false
 								mediumImpact.impactOccurred()
-								print(viewTransitioned)
 							}
 					)
 				
