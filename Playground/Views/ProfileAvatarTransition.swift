@@ -15,7 +15,7 @@ struct ProfileAvatarTransition: View {
 	
 	@State private var scrollOffset = 0.0
 	@State private var scrollElasticOffset = 0.0
-	@State private var profileActualSize = 48.0
+	@State private var profileActualSize = 44.0
 	@State private var profileOffset = 0.0
 	@State private var foregroundOpacity = 1.0
 	@State private var viewTransitioned = false
@@ -68,7 +68,7 @@ struct ProfileAvatarTransition: View {
 											scrollElasticOffset = screenWidth - scrollOffset
 											
 											// Calculate ProfileActualSize
-											profileActualSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: 66, inValue: scrollElasticOffset)
+											profileActualSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 44, outMax: 66, inValue: scrollElasticOffset)
 											
 											// Calculate ProfileOffset
 											profileOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0, outMax: (transitionThreshold - profileActualSize) / 2, inValue: scrollElasticOffset)
@@ -144,7 +144,7 @@ struct ProfileAvatarTransition: View {
 				.background(.white)
 				.frame(width: viewTransitioned ? UIScreen.main.bounds.width : profileActualSize , height: viewTransitioned ? UIScreen.main.bounds.height : profileActualSize)
 				.clipShape(RoundedRectangle(cornerRadius: profileActualSize / 2, style: .continuous))
-				.offset(x: viewTransitioned ? 0 : -6 - profileOffset , y: viewTransitioned ? 0 : -424)
+				.offset(x: viewTransitioned ? 0 : -6 - profileOffset , y: viewTransitioned ? 0 : -381)
 				.gesture(
 					TapGesture()
 						.onEnded() {
