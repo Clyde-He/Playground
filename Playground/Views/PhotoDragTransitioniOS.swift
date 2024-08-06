@@ -11,6 +11,8 @@ import ScrollUI
 
 struct PhotoDragTransitioniOS: View {
     
+    // MARK: Definition
+    
 	// Environments & Preferences
     var screenWidth = UIScreen.main.bounds.width
 	var screenHeight = UIScreen.main.bounds.height
@@ -75,7 +77,6 @@ struct PhotoDragTransitioniOS: View {
 						ZStack (alignment: .trailing) {
 							
 							// Swipe Indicator
-							
 							VStack(alignment:.center, spacing: 8) {
 								
 								ZStack {
@@ -110,7 +111,6 @@ struct PhotoDragTransitioniOS: View {
 							
 							
 							// ScrollView
-							
 							ScrollView(.horizontal, showsIndicators: false) {
 								
 								HStack(spacing: 0) {
@@ -159,6 +159,7 @@ struct PhotoDragTransitioniOS: View {
 												
 												if scrollOffset < screenWidth - transitionThreshold {
 													reachedTransitionThreshold = true
+                                                    print("Reached Transition Threshold")
 													
 												}
 												else {
@@ -204,11 +205,14 @@ struct PhotoDragTransitioniOS: View {
 									}
 								)
 							}
-							.scrollViewStyle(.defaultStyle($state))
-							.onChange(of: state.isDragging) { _, newValue in
-								scrollViewDragged = newValue
-								
-							}
+                            .onScrollPhaseChange{ oldPhase, newPhase in
+                                if newPhase == .interacting {
+                                    scrollViewDragged = true
+                                }
+                                else {
+                                    scrollViewDragged = false
+                                }
+                            }
 							.onTapGesture {
 								withAnimation(.smooth(duration: 0.3)) {
 									hideControls.toggle()
@@ -387,7 +391,6 @@ struct PhotoDragTransitioniOS: View {
                 .padding(.bottom, geometry.safeAreaInsets.bottom)
                 
                 // Foreground
-                
                 if hideControls {
                     Image("Foreground")
                         .resizable()
@@ -398,7 +401,6 @@ struct PhotoDragTransitioniOS: View {
                 }
                 
                 // User Avatar
-				
 				if hideControls {
 					HStack (alignment: .center) {
 						Image("UserAvatar")
@@ -421,7 +423,6 @@ struct PhotoDragTransitioniOS: View {
 				
 				
 				// Secondary View
-				
 				Image(goDetailPage ? "Detail Page" : "Profile")
 					.resizable()
 					.scaledToFit()
