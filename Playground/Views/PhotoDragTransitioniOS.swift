@@ -22,7 +22,7 @@ struct PhotoDragTransitioniOS: View {
 	@State private var showText = false
 	@State private var filledArrow = false
 	@State private var goDetailPage = false
-	@State private var changeOpacity = false
+	@State private var changeOpacity = true
 	@State private var changeSize = true
 	@State private var startSize = 12.0
 	@State private var endSize = 32.0
@@ -31,19 +31,20 @@ struct PhotoDragTransitioniOS: View {
 	// Scroll View
     @State private var scrollOffset = 0.0
     @State private var scrollElasticOffset = 0.0
-
+    @State private var newScrollOffset = 0.0
+    @State private var scrollViewWidth = 0.0
+    
 	@State private var swipeIndicatorOffset = 48.0
 	@State private var swipeIndicatorOpacity = 0.5
 	@State private var swipeIndicatorSize = 32.0
 
 	@State private var foregroundOpacity = 1.0
+    
     @State private var viewTransitioned = false
 	@State private var scrollViewDraggedToThreshold = false
     
 	// ScrollUI
     @State private var scrollViewDragged = false
-    @State private var newScrollOffset: CGPoint = CGPoint(x: 0.0, y: 0.0)
-    @State private var scollViewWidth = 0.0
     @ScrollState var state
     
 	// Haptic Feedback
@@ -78,9 +79,7 @@ struct PhotoDragTransitioniOS: View {
 							
 							// Swipe Indicator
 							VStack(alignment:.center, spacing: 8) {
-								
 								ZStack {
-									
 									Image(filledArrow ? "Arrow_Left_Circle_Fill" : "Arrow_Left_Circle")
 										.renderingMode(.template)
 										.resizable()
@@ -92,11 +91,9 @@ struct PhotoDragTransitioniOS: View {
 										.resizable()
 										.aspectRatio(contentMode: .fit)
 										.opacity(scrollViewDraggedToThreshold ? 1 : 0)
-									
 								}
 								.frame(width: changeSize ? (scrollViewDraggedToThreshold ? finalSize : swipeIndicatorSize) : startSize, height: changeSize ? (scrollViewDraggedToThreshold ? finalSize : swipeIndicatorSize) : startSize)
 								.clipShape(Circle())
-								
 								if showText {
 									Text("Swipe to view profile")
 										.font(.system(.subheadline, weight: .medium))
@@ -112,9 +109,7 @@ struct PhotoDragTransitioniOS: View {
 							
 							// ScrollView
 							ScrollView(.horizontal, showsIndicators: false) {
-								
 								HStack(spacing: 0) {
-									
 									Image("TestPhoto01")
 										.resizable()
 										.aspectRatio(contentMode: .fit)
@@ -159,7 +154,6 @@ struct PhotoDragTransitioniOS: View {
 												
 												if scrollOffset < screenWidth - transitionThreshold {
 													reachedTransitionThreshold = true
-                                                    print("Reached Transition Threshold")
 													
 												}
 												else {
@@ -196,16 +190,16 @@ struct PhotoDragTransitioniOS: View {
 									.frame(width: 0, height: 0)
 								}
 								.frame(maxHeight: UIScreen.main.bounds.width / 3 * 4)
-								.background(
-									GeometryReader { proxy in
-										Color.clear
-											.onAppear {
-												scollViewWidth = proxy.size.width
-											}
-									}
-								)
 							}
-                            .onScrollPhaseChange{ oldPhase, newPhase in
+                            
+                            .onScrollGeometryChange(for: ScrollGeometry.self) { scrollGeometry in
+                                scrollGeometry
+                            } action: { oldValue, newValue in
+                                newScrollOffset = newValue.contentOffset.x
+                                scrollViewWidth = newValue.contentSize.width
+                            }
+                            
+                            .onScrollPhaseChange {oldPhase, newPhase in
                                 if newPhase == .interacting {
                                     scrollViewDragged = true
                                 }
@@ -234,11 +228,43 @@ struct PhotoDragTransitioniOS: View {
 						Spacer()
 						
 						VStack(alignment: .leading, spacing: 12) {
+                            
+                            HStack(spacing: 16) {
+                                VStack(spacing: 4) {
+                                    Text("Offset")
+                                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                        .multilineTextAlignment(.center)
+                                        .foregroundStyle(.secondary)
+                                    Text(String(format: "%.2f", newScrollOffset))
+                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(Color.primary)
+                                }
+                                .frame(maxWidth: .infinity)
+                                VStack(spacing: 4) {
+                                    Text("Size")
+                                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                    Text(String(format: "%.2f", scrollViewWidth))
+                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(Color.primary)
+                                }
+                                .frame(maxWidth: .infinity)
+                                VStack(spacing: 4) {
+                                    Text("Dragged")
+                                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                    Text("\(scrollViewDragged)")
+                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(Color.primary)
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
 							
+                            Divider()
+                            
 							Text("Transition Percentage")
 								.font(.system(size: 12, weight: .medium, design: .monospaced))
 								.foregroundStyle(.secondary)
-							
 							
 							HStack(spacing: 20) {
 								
@@ -258,6 +284,7 @@ struct PhotoDragTransitioniOS: View {
 								
 							}
 							
+                            /*
 							Divider()
 							
 							HStack(spacing: 20) {
@@ -266,7 +293,7 @@ struct PhotoDragTransitioniOS: View {
 									.foregroundStyle(.secondary)
 								Toggle(isOn: $showText, label:{})
 							}
-							
+                            
 							Divider()
 							
 							HStack(spacing: 20) {
@@ -285,8 +312,19 @@ struct PhotoDragTransitioniOS: View {
 								Toggle(isOn: $filledArrow, label:{})
 							}
 							
-							Divider()
-							
+                             */
+                            
+                            Divider()
+                            
+                            HStack(spacing: 20) {
+                                Text("Change Opacity")
+                                    .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                    .foregroundStyle(.secondary)
+                                Toggle(isOn: $changeOpacity, label:{})
+                            }
+                            
+                            Divider()
+                            
 							HStack(spacing: 20) {
 								Text("Change Size")
 									.font(.system(size: 12, weight: .medium, design: .monospaced))
@@ -366,22 +404,12 @@ struct PhotoDragTransitioniOS: View {
 								.fill(Color.primary.opacity(0.05))
 							)
 							
-							
-							Divider()
-							
-							HStack(spacing: 20) {
-								Text("Change Opacity")
-									.font(.system(size: 12, weight: .medium, design: .monospaced))
-									.foregroundStyle(.secondary)
-								Toggle(isOn: $changeOpacity, label:{})
-							}
-							
 						}
-						.padding(EdgeInsets(top: 20, leading: 20, bottom: 16, trailing: 20))
+						.padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
 						.background(RoundedRectangle(cornerRadius: 24, style: .continuous)
 							.fill(Material.thin)
 							.strokeBorder(Color.primary.opacity(0.1), style: StrokeStyle(lineWidth: 1)))
-						.padding(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
+						.padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12))
 						.opacity(hideControls ? 0 : 1)
 					
 					}
