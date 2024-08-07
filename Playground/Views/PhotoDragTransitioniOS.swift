@@ -29,9 +29,8 @@ struct PhotoDragTransitioniOS: View {
 	@State private var finalSize = 56.0
     
 	// Scroll View
-    @State private var scrollOffset = 0.0
-    @State private var scrollElasticOffset = 0.0
-    @State private var newScrollOffset = 0.0
+    @State private var scrollViewOffset = 0.0
+    @State private var scrollViewElasticOffset = 0.0
     @State private var scrollViewWidth = 0.0
     
 	@State private var swipeIndicatorOffset = 48.0
@@ -42,10 +41,7 @@ struct PhotoDragTransitioniOS: View {
     
     @State private var viewTransitioned = false
 	@State private var scrollViewDraggedToThreshold = false
-    
-	// ScrollUI
     @State private var scrollViewDragged = false
-    @ScrollState var state
     
 	// Haptic Feedback
     let mediumImpact = UIImpactFeedbackGenerator(style: .medium)
@@ -122,72 +118,6 @@ struct PhotoDragTransitioniOS: View {
 										.resizable()
 										.aspectRatio(contentMode: .fit)
 										.containerRelativeFrame(.horizontal)
-									GeometryReader { geometry in
-										Color.clear
-											.frame(width: 0, height: 0)
-											.onAppear {
-												scrollOffset = geometry.frame(in: .global).minX
-											}
-											.onChange(of: geometry.frame(in: .global).minX) { _, newValue in
-												
-												// Read scrollOffset
-												scrollOffset = newValue
-												
-												if scrollOffset <= screenWidth {
-													scrollElasticOffset = screenWidth - scrollOffset
-													
-													// Calculate swipeIndicatorSize
-													swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: startSize, outMax: endSize, inValue: scrollElasticOffset)
-													
-													// Calculate swipeIndicatorOpacity
-													swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.3, outMax: 0.7, inValue: scrollElasticOffset)
-													
-													// Calculate swipeIndicatorOffset
-													swipeIndicatorOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: (96 - transitionThreshold) / 2, inValue: scrollElasticOffset)
-													
-													// Calculate ForegroundOpacity
-													foregroundOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 1, outMax: 0.5, inValue: scrollElasticOffset)
-													
-												}
-												
-												// See if ScrollView Reached TransitionThreshold
-												
-												if scrollOffset < screenWidth - transitionThreshold {
-													reachedTransitionThreshold = true
-													
-												}
-												else {
-													reachedTransitionThreshold = false
-												}
-												
-												// See if ScrollView Dragged
-												
-												if scrollViewDragged {
-													if reachedTransitionThreshold {
-														if !scrollViewDraggedToThreshold {
-															mediumImpact.impactOccurred()
-														}
-														scrollViewDraggedToThreshold = true
-														
-													}
-													else {
-														scrollViewDraggedToThreshold = false
-													}
-												}
-												else {
-													if reachedTransitionThreshold {
-														if scrollViewDraggedToThreshold {
-															viewTransitioned = true
-															scrollViewDragged = false
-														}
-													}
-													else {
-														scrollViewDraggedToThreshold = false
-													}
-												}
-											}
-									}
-									.frame(width: 0, height: 0)
 								}
 								.frame(maxHeight: UIScreen.main.bounds.width / 3 * 4)
 							}
@@ -195,8 +125,60 @@ struct PhotoDragTransitioniOS: View {
                             .onScrollGeometryChange(for: ScrollGeometry.self) { scrollGeometry in
                                 scrollGeometry
                             } action: { oldValue, newValue in
-                                newScrollOffset = newValue.contentOffset.x
+                                scrollViewOffset = newValue.contentOffset.x
                                 scrollViewWidth = newValue.contentSize.width
+                                
+                                // See if started elastic dragging
+                                if (scrollViewOffset + screenWidth) >= scrollViewWidth {
+                                    
+                                    // Calculate elastic offset
+                                    scrollViewElasticOffset = scrollViewOffset - scrollViewWidth + screenWidth
+                                    
+                                    // Calculate swipeIndicatorSize
+                                    swipeIndicatorSize = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: startSize, outMax: endSize, inValue: scrollViewElasticOffset)
+                                    
+                                    // Calculate swipeIndicatorOpacity
+                                    swipeIndicatorOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 0.3, outMax: 0.7, inValue: scrollViewElasticOffset)
+                                    
+                                    // Calculate swipeIndicatorOffset
+                                    swipeIndicatorOffset = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 48, outMax: (96 - transitionThreshold) / 2, inValue: scrollViewElasticOffset)
+                                    
+                                    // Calculate ForegroundOpacity
+                                    foregroundOpacity = linearNormalization(inMin: 0, inMax: transitionThreshold, outMin: 1, outMax: 0.5, inValue: scrollViewElasticOffset)
+                                    
+                                    // See if ScrollView Reached TransitionThreshold
+                                    if scrollViewElasticOffset > transitionThreshold {
+                                        reachedTransitionThreshold = true
+                                    }
+                                    else {
+                                        reachedTransitionThreshold = false
+                                    }
+                                    
+                                    // See if ScrollView Dragged to Threshold
+                                    if scrollViewDragged {
+                                        if reachedTransitionThreshold {
+                                            if !scrollViewDraggedToThreshold {
+                                                mediumImpact.impactOccurred()
+                                            }
+                                            scrollViewDraggedToThreshold = true
+                                            
+                                        }
+                                        else {
+                                            scrollViewDraggedToThreshold = false
+                                        }
+                                    }
+                                    else {
+                                        if reachedTransitionThreshold {
+                                            if scrollViewDraggedToThreshold {
+                                                viewTransitioned = true
+                                                scrollViewDragged = false
+                                            }
+                                        }
+                                        else {
+                                            scrollViewDraggedToThreshold = false
+                                        }
+                                    }
+                                }
                             }
                             
                             .onScrollPhaseChange {oldPhase, newPhase in
@@ -207,6 +189,7 @@ struct PhotoDragTransitioniOS: View {
                                     scrollViewDragged = false
                                 }
                             }
+                            
 							.onTapGesture {
 								withAnimation(.smooth(duration: 0.3)) {
 									hideControls.toggle()
@@ -227,7 +210,7 @@ struct PhotoDragTransitioniOS: View {
 						
 						Spacer()
 						
-						VStack(alignment: .leading, spacing: 12) {
+						VStack(alignment: .leading, spacing: 16) {
                             
                             HStack(spacing: 16) {
                                 VStack(spacing: 4) {
@@ -235,25 +218,25 @@ struct PhotoDragTransitioniOS: View {
                                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                                         .multilineTextAlignment(.center)
                                         .foregroundStyle(.secondary)
-                                    Text(String(format: "%.2f", newScrollOffset))
+                                    Text(String(format: "%.2f", scrollViewElasticOffset))
                                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                                         .foregroundStyle(Color.primary)
                                 }
                                 .frame(maxWidth: .infinity)
                                 VStack(spacing: 4) {
-                                    Text("Size")
-                                        .font(.system(size: 12, weight: .medium, design: .monospaced))
-                                        .foregroundStyle(.secondary)
-                                    Text(String(format: "%.2f", scrollViewWidth))
-                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
-                                        .foregroundStyle(Color.primary)
-                                }
-                                .frame(maxWidth: .infinity)
-                                VStack(spacing: 4) {
-                                    Text("Dragged")
+                                    Text("Dragging")
                                         .font(.system(size: 12, weight: .medium, design: .monospaced))
                                         .foregroundStyle(.secondary)
                                     Text("\(scrollViewDragged)")
+                                        .font(.system(size: 14, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(Color.primary)
+                                }
+                                .frame(maxWidth: .infinity)
+                                VStack(spacing: 4) {
+                                    Text("Transition")
+                                        .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                        .foregroundStyle(.secondary)
+                                    Text("\(scrollViewDraggedToThreshold)")
                                         .font(.system(size: 14, weight: .medium, design: .monospaced))
                                         .foregroundStyle(Color.primary)
                                 }
@@ -430,13 +413,13 @@ struct PhotoDragTransitioniOS: View {
                 
                 // User Avatar
 				if hideControls {
-					HStack (alignment: .center) {
+					HStack(alignment: .center) {
 						Image("UserAvatar")
 							.resizable()
 							.aspectRatio(contentMode: .fit)
-							.frame(width: 48, height: 48)
+							.frame(width: 44, height: 44)
 							.clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-							.offset(x: -6, y: -424)
+							.offset(x: -6, y: -425)
 							.opacity(foregroundOpacity)
 							.gesture(
 								TapGesture()

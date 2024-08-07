@@ -10,7 +10,6 @@
 		C23980BC2B9B0FB60004E57E /* ProfileAvatarTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23980BB2B9B0FB60004E57E /* ProfileAvatarTransition.swift */; };
 		C23980C02B9B2CE00004E57E /* ListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C23980BF2B9B2CE00004E57E /* ListItem.swift */; };
 		C25BA96F2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25BA96E2BA24DA100DBE205 /* PhotoDragTransitioniOS.swift */; };
-		C25BA9722BA2553C00DBE205 /* ScrollUI in Frameworks */ = {isa = PBXBuildFile; productRef = C25BA9712BA2553C00DBE205 /* ScrollUI */; };
 		C2B705512BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B705502BACEB5A008B62C7 /* PhotoDragTransitionAndroid.swift */; };
 		C2E70C652B832CF3002E3109 /* PlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C642B832CF3002E3109 /* PlaygroundApp.swift */; };
 		C2E70C672B832CF3002E3109 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E70C662B832CF3002E3109 /* ContentView.swift */; };
@@ -44,7 +43,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C25BA9722BA2553C00DBE205 /* ScrollUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,7 +134,6 @@
 			);
 			name = Playground;
 			packageProductDependencies = (
-				C25BA9712BA2553C00DBE205 /* ScrollUI */,
 			);
 			productName = Playground;
 			productReference = C2E70C612B832CF3002E3109 /* Playground.app */;
@@ -167,7 +164,6 @@
 			);
 			mainGroup = C2E70C582B832CF3002E3109;
 			packageReferences = (
-				C25BA9702BA2553C00DBE205 /* XCRemoteSwiftPackageReference "ScrollViewStyle" */,
 			);
 			productRefGroup = C2E70C622B832CF3002E3109 /* Products */;
 			projectDirPath = "";
@@ -418,25 +414,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		C25BA9702BA2553C00DBE205 /* XCRemoteSwiftPackageReference "ScrollViewStyle" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TimmysApp/ScrollViewStyle";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		C25BA9712BA2553C00DBE205 /* ScrollUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C25BA9702BA2553C00DBE205 /* XCRemoteSwiftPackageReference "ScrollViewStyle" */;
-			productName = ScrollUI;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C2E70C592B832CF3002E3109 /* Project object */;
 }
